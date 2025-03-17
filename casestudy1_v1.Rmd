@@ -1,0 +1,216 @@
+---
+title: "casestudy1v1"
+author: "Kiet"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+```
+
+
+##Introduction
+
+Welcome to the Cyclistic bike-share analysis case study! In this case study, I work for a fictional company, Cyclistic, along with some key team members. In order to answer the business questions, follow the steps of the data analysis process: Ask, Prepare, Process, Analyze, Share, and Act. Along the way, the Case Study Roadmap tables — including guiding questions and key tasks — will help me stay on the right path.
+
+##Scenario
+
+I'm a junior data analyst working on the marketing analyst team at Cyclistic, a bike-share company in Chicago. 
+
+In 2016, Cyclistic launched a successful bike-share offering. Since then, the program has grown to a fleet of 5,824 bicycles that are geotracked and locked into a network of 692 stations across Chicago. The bikes can be unlocked from one station and returned to any other station in the system anytime.
+
+Until now, Cyclistic’s marketing strategy relied on building general awareness and appealing to broad consumer segments. One approach that helped make these things possible was the flexibility of its pricing plans: single-ride passes, full-day passes, and annual memberships.
+
+Customers who purchase single-ride or full-day passes are referred to as casual riders. Customers who purchase annual memberships are Cyclistic members. Cyclistic’s finance analysts have concluded that annual members are much more profitable than casual riders. Although the pricing flexibility helps Cyclistic attract more customers, Moreno believes that maximizing the number of annual members will be key to future growth. Rather than creating a marketing campaign that targets all-new customers, Moreno believes there is a solid opportunity to convert casual riders into members. She notes that casual riders are already aware of the Cyclistic program and have chosen Cyclistic for their mobility needs
+
+## Characters and teams
+● Cyclistic: A bike-share program that features more than 5,800 bicycles and 600
+docking stations. Cyclistic sets itself apart by also offering reclining bikes, hand
+tricycles, and cargo bikes, making bike-share more inclusive to people with disabilities and riders who can’t use a standard two-wheeled bike. The majority of riders opt for traditional bikes; about 8% of riders use the assistive options. Cyclistic users are more likely to ride for leisure, but about 30% use the bikes to commute to work each day.
+
+● Lily Moreno: The director of marketing and my manager. Moreno is responsible for
+the development of campaigns and initiatives to promote the bike-share program.
+These may include email, social media, and other channels.
+
+● Cyclistic marketing analytics team: A team of data analysts who are responsible for
+collecting, analyzing, and reporting data that helps guide Cyclistic marketing strategy. I joined this team six months ago and have been busy learning about Cyclistic’s mission and business goals—as well as how I, as a junior data analyst, can help Cyclistic achieve them.
+
+● Cyclistic executive team: The notoriously detail-oriented executive team will decide
+whether to approve the recommended marketing program.
+
+## Ask Phase
+Moreno has set a clear goal: Design marketing strategies aimed at converting casual riders into annual members. In order to do that, however, the team needs to better understand how annual members and casual riders differ, why casual riders would buy a membership, and how digital media could affect their marketing tactics.We are interested in analyzing the Cyclistic historical bike trip data to identify trends.
+She believes the company’s future success depends on maximizing the number of annual memberships. Therefore, my team wants to understand how casual riders and annual members use Cyclistic bikes differently. From these insights, my team will design a new marketing strategy to convert casual riders into annual members. But first, Cyclistic executives must approve my recommendations, so they must be backed up with compelling data insights and professional data visualizations.
+
+## Data Preperation 
+  Cyclistic's historical data to analyse and identify trends is downloaded and stored appropriately in a folder.The data source here being the Motivate International Inc. The recommended cyclistic trip data to be downloaded is that of the previous 12 months which spans from January 2024 to December 2024. The data for each month stored in the folder are then named according to the necessary naming conventions with the usage of underscores, capital letters and numbers. An example being the data for the month of April 2021 stored as "202402-divvy-tripdata". There are no issues with the data's credibility and the data is good data and that is because it is reliable: comes from a good data source and under a valid license, the data is original: validated with the company's original source, the data is comprehensive: contains all critical information we need, the data is current: downloaded the previous 12 months and so it is very useful at this particular time, the data is cited: from a source and a reliable one at that. 
+  
+## Data Processing 
+  Clean data is the launchpad for any strong analysis. The integrity of data is very important and so this is always in a direct relationship with clean data, one of the famous rules of a data's integrity is it's ability to not be compromised. Thus getting rid of duplicates, blanks, irrelevant data that do not align with objectives, inconsistent data, outdated data, inaccurate/incorrect data helps us ensure data integrity- assurance of, data accuracy and consistency over its entire life-cycle. This data must be unique , values must match prescribed patterns, the data must be consistent, the data must be relevant to determine our course of action to achieve our intended objective. This phase ensures that data meets all these requirements.
+  
+The preferred tool for data processing for this analysis is R and RStudio. This is often considered the best place for this task and that is because it handles large complex data which excel and SQL would not be able to handle, it's convenient library of packages which offer a helpful combination of code and reusable R function among others. The processing of data using RStudio in R begins by installing the necessary packages. These packages include tidyverse-a collection of packages in R with a common design philosophy for data manipulation and exploration and visaulizations, lubridate-an R package that makes it easier to work with dates and times, dplyr- an R package that contains a set of functions (or “verbs”) that perform common data manipulation operations such as filtering for rows, selecting specific columns etc,ggplot2- an R package used for visualizations and readr- an R package for data importing. It's important to know that all these pacakges are core packages under the tidyverse
+
+```{r installing_packages}
+install.packages("tidyverse")
+install.packages("lubridate")
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("readr")
+install.packages("hydroTSM")
+```
+
+The next step of the data processing phase is to load the various packages using the library function
+```{r data processing_load_packages}
+library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(hydroTSM)
+```
+
+I then imported the data into RStduio using the read_csv function contained in the readr package. This function would be used for each month's trip csv data 
+
+```{r data processing_Import_csv}
+data_24_01 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202401-divvy-tripdata/202401-divvy-tripdata.csv")
+data_24_02 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202402-divvy-tripdata/202402-divvy-tripdata.csv")
+data_24_03 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202403-divvy-tripdata/202403-divvy-tripdata.csv")
+data_24_04 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202404-divvy-tripdata/202404-divvy-tripdata.csv")
+data_24_05 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202405-divvy-tripdata/202405-divvy-tripdata.csv")
+data_24_06 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202406-divvy-tripdata/202406-divvy-tripdata.csv")
+data_24_07 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202407-divvy-tripdata/202407-divvy-tripdata.csv")
+data_24_08 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202408-divvy-tripdata/202408-divvy-tripdata.csv")
+data_24_09 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202409-divvy-tripdata/202409-divvy-tripdata.csv")
+data_24_10 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202410-divvy-tripdata/202410-divvy-tripdata.csv")
+data_24_11 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202411-divvy-tripdata/202411-divvy-tripdata.csv")
+data_24_12 <- read.csv("D:/Hồ sơ/GG Data Analyst/Data/202412-divvy-tripdata/202412-divvy-tripdata.csv")
+```
+
+Proceeded to merge every month's data into a larger data set using the rbind function. merging data makes analysis easier 
+
+```{r data procesing_data_merging}
+data_12_months <- rbind(data_24_01,data_24_02,data_24_03,data_24_04,data_24_05,data_24_06,data_24_07,data_24_08,data_24_09,data_24_10,data_24_11,data_24_12)
+```
+
+The ride length between the ended_time and started_time is calculated. Getting the ride length is important because it gives s fresh insights for our analysis 
+
+```{r data processing_ride_length}
+data_12_months$ride_length <- difftime(data_12_months$ended_at, data_12_months$started_at, units = "mins")
+```
+
+Create a new version after update 
+```{r}
+data_12_months_v2 <- data_12_months
+```
+
+I proceeded by extracting the day, month, year and day_of_week from the started_at column which is in the POSIXct format. This helps in deriving more insights from this data set
+ 
+```{r data processing_extract_month_column_from_new_date_column}
+data_12_months_v2$date <- as.Date(data_12_months_v2$started_at) 
+data_12_months_v2$month <- format(as.Date(data_12_months_v2$date), "%m")
+data_12_months_v2$day <- format(as.Date(data_12_months_v2$date), "%d")
+data_12_months_v2$year <- format(as.Date(data_12_months_v2$date), "%Y")
+data_12_months_v2$day_of_week <- format(as.Date(data_12_months_v2$date), "%A")
+```
+
+I now have a large data set with the necessary columns for analysis but first the data has to be cleaned; get rid of null values, get rid of duplicates, get rid of unnecessary information/columns.
+
+```{r data_processing_data_cleaning}
+data_12_months_v2 <- distinct(data_12_months_v2) # get ride of duplicates
+data_12_months_v2 <- data_12_months_v2 %>% 
+  drop_na() # get rid of null values
+```
+
+Remove ride_lengths of values less than a minute and more than an 1440 minutes/ an hour
+
+```{r data processing_get_rid_of_unneccesary_ride_length}
+data_12_months_v2 <- data_12_months_v2 %>% filter(ride_length > 1) %>% filter(ride_length < 1440) # get rid of ride_lengths of more than a day (1440 minutes)
+```
+
+Create a new version dataset which select columns that would be useful for this analysis
+
+```{r data processing_select_columns}
+data_12_months_v3 <- data_12_months_v2%>%
+  select(ride_id, rideable_type, started_at, ended_at, start_station_name,end_station_name, member_casual, month, year, day_of_week, ride_length)
+```
+
+```{r data processing_random_checks}
+unique(data_12_months_v3$rideable_type) # Check rideable types
+unique(data_12_months_v3$member_casual) # check member_casual 
+```
+
+## Analyse Phase
+
+The next phase after the process phase(cleaning phase) is the analysis phase. Here calculations would take place which we would then use for data insights.
+
+```{r}
+data_12_months_v3 %>%
+  group_by(rideable_type, member_casual) %>%
+  dplyr::summarize(count_trips = n(), .groups = 'drop') %>%  # Use .groups = 'drop' to ungroup the result
+  ggplot(aes(x = rideable_type, y = count_trips, fill = member_casual, color = member_casual)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  theme_bw() +
+  labs(title = "Bicycle Type Number of trips", x = "Bicycle Type", y = "Count of Trips")
+```
+
+```{r}
+library("dplyr")
+data_12_months_v3$month <- ordered(data_12_months_v3$month, levels=c("01", "02", "03", "04", "05", "06", "07","08","09","10","11","12"))
+```
+
+
+```{r}
+data_12_months_v3 %>%
+  group_by(member_casual,month) %>%
+  dplyr::summarize(count_trips = n(), .groups = 'drop') %>%  
+  ggplot(aes(x= month, y=count_trips, fill=member_casual, color=member_casual)) +
+  geom_bar(stat='identity', position = 'dodge') +
+  theme_bw() +
+  labs(title ="Number of bike rides per month", x = "Month", y = "Count of Trips")
+```
+
+```{r}
+data_12_months_v3 %>%
+  group_by(member_casual,start_station_name) %>%
+  dplyr::summarise(number_of_ride = n(), .groups = 'drop') %>%
+  filter(start_station_name != "", "casual"== member_casual) %>%
+  arrange(-number_of_ride) %>%
+  head(n=30) %>%
+  select(-member_casual)
+```
+
+```{r}
+data_12_months_v3 %>%
+  group_by(member_casual,start_station_name) %>%
+  dplyr::summarise(number_of_ride = n(), .groups = 'drop') %>%
+  filter(start_station_name != "", "member" == member_casual) %>%
+  arrange(-number_of_ride) %>%
+  head(n=30) %>%
+  select(-member_casual)
+```
+
+## Data Visualization
+
+Below is a dashboard that perfectly visualizes the data for which we can draw insights  
+
+
+## Data Insights 
+
+Below are the data insights retrieved from the visualization of the Cyclistic data 
+
+From the number of rides per season chart it is observed that members take more rides than casual over every season except during the summer period and that's because for casual riders the appeal of the summer is forever enticing for a stroll on the bike as compared to every other season. The members however dominate other seasons because it's very clear that the rides are their source of transportation to and from work. This is the same reason why in the number of rides per weekday line chart, we see the  members dominate over every weekday and casuals over the weekend.
+
+As earlier seen, although the casual dominates number of rides only over the weekends the last line chart shows a total domination of average ride lengths for casual over members across every weekday. This means the casual members have a greater ride length with a fewer rides than the members who have more rides with lesser ride length. This proves that for members, their rides are a routine one comprising of similar ride lengths but for casuals we have rides of different increased durations.
+
+### Recommendations 
+
+A digital ad named "Passion Into Members" should be launched where we convince the casual riders to switch to members. How do we do this? For the members, its just a routine but for casaul riders it's something they are passionate about and hence we put out an ad that speaks to their passion, something they can relate to.  
+
+We know of the decreasing number of rides during the winter, spring and autumn therefore we should provide for them a discount for their membership conversion, this shows how much we care and how much we know of the obsatcles they face in the form of weather.
+
+Still on luring them, we can organise bicycle ride competitions for them every summer period. This lures other passionate bicylcle riders to enlist our services and thus be members. 
+
